@@ -2,6 +2,7 @@
 
 Player::Player()
 {
+	this->initPhysics();
 }
 
 Player::Player(std::string& fileName, std::string& animationJSON, int width, int height, Sprite* sprite,
@@ -79,26 +80,40 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 
 void Player::Update()
 {
-	if (!m_locked)
-	{
-		MovementUpdate();
-	}
-
+	MovementUpdate();
 	AnimationUpdate();
 }
 
 void Player::MovementUpdate()
 {
 	m_moving = false;
+	jump = true;
 
 	if (m_hasPhysics)
 	{
+		//vel = vec3(0.f, -1.f, 0.f);
 		float speed = 10.f;
-		vec3 vel = vec3(0.f, 0.f, 0.f);
 
 		if (Input::GetKey(Key::Shift))
 		{
 			speed *= 15.f;
+		}
+
+		if (Input::GetKeyDown(Key::Space))
+		{
+
+			if (timer < 0.3f && jump == true)
+			{
+				timer += Timer::currentClock;
+				vel = vel + vec3(0.f, 4.f, 0.f);
+				/*m_physBody->SetVelocity(vec3(0.f, 900.f, 0.f));*/
+			}
+			else
+			{
+				timer = 0;
+
+				jump = false;
+			}
 		}
 
 		if (Input::GetKey(Key::A))
@@ -116,37 +131,24 @@ void Player::MovementUpdate()
 
 		m_physBody->SetVelocity(vel * speed);
 	}
-	else
-	{
-		//Regular Movement
-		float speed = 30.f;
+	//else
+	//{
+	//	//Regular Movement
+	//	float speed = 30.f;
 
-		if (Input::GetKey(Key::A))
-		{
-			m_transform->SetPositionX(m_transform->GetPositionX() - (speed * Timer::deltaTime));
-			m_facing = LEFT;
-			m_moving = true;
-		}
-		if (Input::GetKey(Key::D))
-		{
-			m_transform->SetPositionX(m_transform->GetPositionX() + (speed * Timer::deltaTime));
-			m_facing = RIGHT;
-			m_moving = true;
-		}
-	}
-
-	if (Input::GetKeyDown(Key::Space))
-	{
-		m_moving = false;
-
-		if (m_hasPhysics)
-		{
-			m_physBody->SetVelocity(vec3());
-		}
-
-		m_attacking = true;
-		m_locked = true;
-	}
+	//	if (Input::GetKey(Key::A))
+	//	{
+	//		m_transform->SetPositionX(m_transform->GetPositionX() - (speed * Timer::deltaTime));
+	//		m_facing = LEFT;
+	//		m_moving = true;
+	//	}
+	//	if (Input::GetKey(Key::D))
+	//	{
+	//		m_transform->SetPositionX(m_transform->GetPositionX() + (speed * Timer::deltaTime));
+	//		m_facing = RIGHT;
+	//		m_moving = true;
+	//	}
+	//}
 }
 
 void Player::AnimationUpdate()
