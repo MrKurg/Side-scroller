@@ -5,7 +5,7 @@ SideScrollerGame::SideScrollerGame(std::string name)
 	: Scene(name)
 {
 	//Sets Gravity
-	m_gravity = b2Vec2(0.f, -6000.f);
+	m_gravity = b2Vec2(0.f, -200.f);
 	m_physicsWorld->SetGravity(m_gravity);
 }
 
@@ -49,44 +49,6 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 	//	ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
 	//	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.f));
 	//}
-
-	//Setup Sprite
-	{
-		auto entity = ECS::CreateEntity();
-		ECS::SetIsMainPlayer(entity, true);
-
-		ECS::AttachComponent<Player>(entity);
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-		ECS::AttachComponent<PhysicsBody>(entity);
-		ECS::AttachComponent<AnimationController>(entity);
-
-		//Set up components
-		std::string fileName = "spritesheets/Link.png";
-		std::string animations = "linkAnimations.json";
-		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 20, 30, &ECS::GetComponent<Sprite>(entity),
-			&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity));
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
-
-		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
-
-		//Size of hitbox; bigger number for smaller size
-		float shrinkX = 0.f;
-		float shrinkY = 0.f;
-
-		b2Body* tempBody;
-		b2BodyDef tempDef;
-		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0.f), float32(30.f));
-		tempDef.angle = Transform::ToRadians(0.f);
-
-		tempBody = m_physicsWorld->CreateBody(&tempDef);
-
-		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
-
-		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->SetFixedRotation(true);
-	}
 
 	//Setup BOX
 	{
@@ -150,6 +112,44 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 
 	}
 
+	//Setup Sprite
+	{
+		auto entity = ECS::CreateEntity();
+		ECS::SetIsMainPlayer(entity, true);
+
+		ECS::AttachComponent<Player>(entity);
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+
+		//Set up components
+		std::string fileName = "spritesheets/Link.png";
+		std::string animations = "linkAnimations.json";
+		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 20, 30, &ECS::GetComponent<Sprite>(entity),
+														&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity), true, &ECS::GetComponent<PhysicsBody>(entity));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Size of hitbox; bigger number for smaller size
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_dynamicBody;
+		tempDef.position.Set(float32(0.f), float32(30.f));
+		tempDef.angle = Transform::ToRadians(0.f);
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);	
+
+		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
+
+		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->SetFixedRotation(true);
+	}
+
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 }
@@ -163,25 +163,30 @@ void SideScrollerGame::Update()
 
 void SideScrollerGame::KeyboardHold()
 {
-	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
-	float speed = 10.f;
-	b2Vec2 vel = b2Vec2(0.f, 0.f);
+	//auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+	//float speed = 20.f;
+	//b2Vec2 vel = b2Vec2(0.f, 0.f);
 
-	if (Input::GetKey(Key::Space))
-	{
-		vel += b2Vec2(0.f,10.f);
-		//player.GetBody()->SetLinearVelocity(speed * vel + b2Vec2(0.f, player.GetBody()->GetLinearVelocity().y * 0.3f));
-	}
-	if (Input::GetKey(Key::A))
-	{
-		vel += b2Vec2(-10.f, 0.f);
-	}
-	if (Input::GetKey(Key::D))
-	{
-		vel += b2Vec2(10.f, 0.f);
-	}
+	//if (Input::GetKey(Key::A))
+	//{
+	//	vel += b2Vec2(-10.f, 0.f);
+	//}
+	//if (Input::GetKey(Key::D))
+	//{
+	//	vel += b2Vec2(10.f, 0.f);
+	//}
 
-	player.GetBody()->SetLinearVelocity(speed * vel);
+	//if (Input::GetKey(Key::Space))
+	//{
+	//	vel += b2Vec2(0.f, 10.f);
+	//	//player.GetBody()->SetLinearVelocity(speed * vel + b2Vec2(0.f, player.GetBody()->GetLinearVelocity().y * 0.3f));
+	//}
+	//else
+	//{
+	//	player.GetBody()->ApplyForce(b2Vec2(0.f, -5000.f), player.GetBody()->GetWorldCenter(), false);
+	//}
+
+	//player.GetBody()->SetLinearVelocity(speed * vel);
 }
 
 void SideScrollerGame::KeyboardDown()

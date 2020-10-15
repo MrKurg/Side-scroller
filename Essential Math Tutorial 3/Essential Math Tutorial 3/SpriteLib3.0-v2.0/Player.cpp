@@ -79,37 +79,52 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 
 void Player::Update()
 {
-	if (!m_locked)
-	{
-		MovementUpdate();
-	}
-
+	MovementUpdate();
 	AnimationUpdate();
 }
 
 void Player::MovementUpdate()
 {
 	m_moving = false;
+	auto timer = Timer::deltaTime;
+	bool jump = true;
 
 	if (m_hasPhysics)
 	{
-		float speed = 10.f;
-		vec3 vel = vec3(0.f, 0.f, 0.f);
+		vec3 vel = vec3(0.f, -1.f, 0.f);
+		float speed = 20.f;
 
 		if (Input::GetKey(Key::Shift))
 		{
 			speed *= 15.f;
 		}
 
+		if (Input::GetKeyDown(Key::Space))
+		{
+			jump = true;
+
+			if (timer < 0.5f && jump == true)
+			{
+				timer += Timer::deltaTime;
+				vel = vel + vec3(0.f, 10.f, 0.f);
+				/*m_physBody->SetVelocity(vec3(0.f, 900.f, 0.f));*/
+			}
+			else
+			{
+				timer = 0;
+				/*jump = false;*/
+			}
+		}
+
 		if (Input::GetKey(Key::A))
 		{
-			vel = vel + vec3(-3.f, 0.f, 0.f);
+			vel = vel + vec3(-5.f, 0.f, 0.f);
 			m_facing = LEFT;
 			m_moving = true;
 		}
 		if (Input::GetKey(Key::D))
 		{
-			vel = vel + vec3(3.f, 0.f, 0.f);
+			vel = vel + vec3(5.f, 0.f, 0.f);
 			m_facing = RIGHT;
 			m_moving = true;
 		}
@@ -133,19 +148,6 @@ void Player::MovementUpdate()
 			m_facing = RIGHT;
 			m_moving = true;
 		}
-	}
-
-	if (Input::GetKeyDown(Key::Space))
-	{
-		m_moving = false;
-
-		if (m_hasPhysics)
-		{
-			m_physBody->SetVelocity(vec3());
-		}
-
-		m_attacking = true;
-		m_locked = true;
 	}
 }
 
