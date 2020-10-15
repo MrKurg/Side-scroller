@@ -86,13 +86,12 @@ void Player::Update()
 void Player::MovementUpdate()
 {
 	m_moving = false;
-	auto timer = Timer::deltaTime;
-	bool jump = true;
+	jump = true;
 
 	if (m_hasPhysics)
 	{
-		vec3 vel = vec3(0.f, -1.f, 0.f);
-		float speed = 20.f;
+		//vel = vec3(0.f, -1.f, 0.f);
+		float speed = 10.f;
 
 		if (Input::GetKey(Key::Shift))
 		{
@@ -101,54 +100,54 @@ void Player::MovementUpdate()
 
 		if (Input::GetKeyDown(Key::Space))
 		{
-			jump = true;
 
-			if (timer < 0.5f && jump == true)
+			if (timer < 0.3f && jump == true)
 			{
-				timer += Timer::deltaTime;
-				vel = vel + vec3(0.f, 10.f, 0.f);
+				timer += Timer::currentClock;
+				vel = vel + vec3(0.f, 4.f, 0.f);
 				/*m_physBody->SetVelocity(vec3(0.f, 900.f, 0.f));*/
 			}
 			else
 			{
 				timer = 0;
-				/*jump = false;*/
+
+				jump = false;
 			}
 		}
 
 		if (Input::GetKey(Key::A))
 		{
-			vel = vel + vec3(-5.f, 0.f, 0.f);
+			vel = vel + vec3(-3.f, 0.f, 0.f);
 			m_facing = LEFT;
 			m_moving = true;
 		}
 		if (Input::GetKey(Key::D))
 		{
-			vel = vel + vec3(5.f, 0.f, 0.f);
+			vel = vel + vec3(3.f, 0.f, 0.f);
 			m_facing = RIGHT;
 			m_moving = true;
 		}
 
 		m_physBody->SetVelocity(vel * speed);
 	}
-	else
-	{
-		//Regular Movement
-		float speed = 30.f;
+	//else
+	//{
+	//	//Regular Movement
+	//	float speed = 30.f;
 
-		if (Input::GetKey(Key::A))
-		{
-			m_transform->SetPositionX(m_transform->GetPositionX() - (speed * Timer::deltaTime));
-			m_facing = LEFT;
-			m_moving = true;
-		}
-		if (Input::GetKey(Key::D))
-		{
-			m_transform->SetPositionX(m_transform->GetPositionX() + (speed * Timer::deltaTime));
-			m_facing = RIGHT;
-			m_moving = true;
-		}
-	}
+	//	if (Input::GetKey(Key::A))
+	//	{
+	//		m_transform->SetPositionX(m_transform->GetPositionX() - (speed * Timer::deltaTime));
+	//		m_facing = LEFT;
+	//		m_moving = true;
+	//	}
+	//	if (Input::GetKey(Key::D))
+	//	{
+	//		m_transform->SetPositionX(m_transform->GetPositionX() + (speed * Timer::deltaTime));
+	//		m_facing = RIGHT;
+	//		m_moving = true;
+	//	}
+	//}
 }
 
 void Player::AnimationUpdate()
