@@ -85,9 +85,11 @@ private:
 	//Have we locked the player from moving during this animation?
 	bool m_locked = false;
 
-	vec3 vel = vec3();
-	float timer = Timer::deltaTime;
-	bool jump = true;
+	float timer;
+	float maxSpeed;
+	float dtimer;
+	bool m_jump = false;
+	bool decel = false;
 
 	//A reference to our sprite
 	Sprite* m_sprite = nullptr;

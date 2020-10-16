@@ -1,4 +1,5 @@
 #include "Player.h"
+using namespace std;
 
 Player::Player()
 {
@@ -79,56 +80,113 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 
 void Player::Update()
 {
-	MovementUpdate();
+	if (!m_locked)
+	{
+		MovementUpdate();
+	}
 	AnimationUpdate();
 }
 
 void Player::MovementUpdate()
 {
 	m_moving = false;
-	jump = true;
-
+	float speed = 100.f;
+	vec3 vel = vec3(0.f, 0.f, 0.f);
 	if (m_hasPhysics)
 	{
-		//vel = vec3(0.f, -1.f, 0.f);
-		float speed = 10.f;
 
 		if (Input::GetKey(Key::Shift))
 		{
-			speed *= 15.f;
+			speed *= 20.f;
 		}
 
-		if (Input::GetKeyDown(Key::Space))
+		if (Input::GetKeyDown(Key::Space)) {
+			timer = Timer::currentClock;
+			m_jump = true;
+		}
+		if (Input::GetKey(Key::Space) && m_jump == true)
 		{
-
-			if (timer < 0.3f && jump == true)
-			{
-				timer += Timer::currentClock;
-				vel = vel + vec3(0.f, 4.f, 0.f);
-				/*m_physBody->SetVelocity(vec3(0.f, 900.f, 0.f));*/
+			vel = vec3(0.f, 1.f, 0.f);
+			dtimer = Timer::currentClock - timer;
+			if (dtimer < 300.f) {
+				maxSpeed = speed * 12;
+				//m_physBody->GetVelocity().y + vel.y;
+				m_moving = true;
+				cout << dtimer << endl;
+				cout << m_physBody->GetVelocity().y << endl;
 			}
-			else
-			{
-				timer = 0;
-
-				jump = false;
+			else {
+				m_jump = false;
 			}
+		}
+
+		if (Input::GetKeyDown(Key::A))
+		{
+			timer = Timer::currentClock;
+		}
+		if (Input::GetKeyDown(Key::D))
+		{
+			timer = Timer::currentClock;
+		}
+		if (Input::GetKeyUp(Key::A))
+		{
+			m_facing = LEFT;
+			m_moving = true;
+			decel = true;
+			timer = Timer::currentClock;
+		}
+		if (Input::GetKeyUp(Key::D))
+		{
+			m_facing = LEFT;
+			m_moving = true;
+			decel = true;
+			timer = Timer::currentClock;
 		}
 
 		if (Input::GetKey(Key::A))
 		{
-			vel = vel + vec3(-3.f, 0.f, 0.f);
+			vel = vec3(-1.f, 0.f, 0.f);
+			dtimer = Timer::currentClock - timer;
+			if (dtimer <= 550.f) {				
+				maxSpeed = speed * (dtimer / 550);
+				cout << "Time: " << dtimer << "\nAcceleration: " << maxSpeed << endl;
+			}
+			/*if (decel) {
+				if (dtimer <= 550.f) {
+					maxSpeed = (550 * dtimer) / 550;
+					cout << "Time: " << dtimer << "\nDeceleration: " << maxSpeed << endl;
+				}
+			}
+			else {
+				decel = false;
+			}*/
+
 			m_facing = LEFT;
 			m_moving = true;
 		}
 		if (Input::GetKey(Key::D))
 		{
-			vel = vel + vec3(3.f, 0.f, 0.f);
+			vel = vec3(1.f, 0.f, 0.f);
+			dtimer = Timer::currentClock - timer;
+			if (dtimer <= 550.f) {
+				maxSpeed = speed * (dtimer / 550);
+				cout << "Time: " << dtimer << "\nAcceleration: " << maxSpeed << endl;
+			}
+			/*if (decel) {
+				if (dtimer <= 550.f) {
+					maxSpeed = (550 * dtimer) / 550;
+					cout << "Time: " << dtimer << "\nDeceleration: " << maxSpeed << endl;
+				}
+			}
+			else {
+				decel = false;
+			}*/
+
 			m_facing = RIGHT;
 			m_moving = true;
 		}
 
-		m_physBody->SetVelocity(vel * speed);
+		m_physBody->SetVelocity(vel * maxSpeed);
 	}
 	//else
 	//{

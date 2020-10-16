@@ -1,11 +1,12 @@
 #include "SideScrollerGame.h"
 #include "Utilities.h"
+using namespace std;
 
 SideScrollerGame::SideScrollerGame(std::string name)
 	: Scene(name)
 {
 	//Sets Gravity
-	m_gravity = b2Vec2(0.f, -200.f);
+	m_gravity = b2Vec2(0.f, -3000.f);
 	m_physicsWorld->SetGravity(m_gravity);
 }
 
@@ -146,6 +147,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);	
 
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
+		tempPhsBody.GetBody()->GetFixtureList()->SetFriction(0);
 
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->SetFixedRotation(true);
 	}
@@ -159,34 +161,61 @@ void SideScrollerGame::Update()
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 	/*Scene::AdjustScrollOffset();*/
 	player.Update();
+
+	//Resets position after falling
+	{
+		b2Vec2 playerPosition = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition();
+		if (playerPosition.y >= -100)
+		{
+			ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).SetPosition(b2Vec2(0.f, 0.f));
+		}
+	}
 }
 
 void SideScrollerGame::KeyboardHold()
 {
-	//auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
-	//float speed = 20.f;
-	//b2Vec2 vel = b2Vec2(0.f, 0.f);
+	/*auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+	float speed = 100.f;
+	b2Vec2 vel = b2Vec2(0.f, player.GetBody()->GetLinearVelocity().y);
+	b2Vec2 accel = b2Vec2();
 
-	//if (Input::GetKey(Key::A))
-	//{
-	//	vel += b2Vec2(-10.f, 0.f);
-	//}
-	//if (Input::GetKey(Key::D))
-	//{
-	//	vel += b2Vec2(10.f, 0.f);
-	//}
+	if (Input::GetKey(Key::Shift))
+	{
+		speed *= 10.f;
+	}
 
-	//if (Input::GetKey(Key::Space))
-	//{
-	//	vel += b2Vec2(0.f, 10.f);
-	//	//player.GetBody()->SetLinearVelocity(speed * vel + b2Vec2(0.f, player.GetBody()->GetLinearVelocity().y * 0.3f));
-	//}
-	//else
-	//{
-	//	player.GetBody()->ApplyForce(b2Vec2(0.f, -5000.f), player.GetBody()->GetWorldCenter(), false);
-	//}
+	if (Input::GetKey(Key::A))
+	{
+		vel.x -= speed;
+		accel.x -= vel.x * timer;
+	}
+	if (Input::GetKey(Key::D))
+	{
+		vel.x += speed;
+		accel.x += vel.x * timer;
+	}
 
-	//player.GetBody()->SetLinearVelocity(speed * vel);
+	if (Input::GetKeyDown(Key::A))
+	{
+		timer += Timer::currentClock;
+		cout << "Time: " << timer <<
+			"\nAcceleration: " << accel.x << endl;
+	}
+	if (Input::GetKeyDown(Key::D))
+	{
+		timer += Timer::currentClock;
+		cout << "Time: " << timer <<
+			"\nAcceleration: " << accel.x << endl;
+	}
+
+	if (Input::GetKeyDown(Key::Space))
+	{
+		if (-0.01f < player.GetBody()->GetLinearVelocity().y && player.GetBody()->GetLinearVelocity().y < 0.01f)
+		{
+			vel.y = 300.f;
+		}
+	}
+	player.GetBody()->SetLinearVelocity(vel);*/
 }
 
 void SideScrollerGame::KeyboardDown()

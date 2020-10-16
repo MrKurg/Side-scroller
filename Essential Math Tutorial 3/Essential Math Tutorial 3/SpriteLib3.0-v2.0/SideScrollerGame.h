@@ -11,6 +11,10 @@ public:
 
 	void Update() override;
 
+	float timer;
+	bool canJump = false;
+	float maxSpeed = 150.f;
+
 	//Input overrides
 	void KeyboardHold() override;
 	void KeyboardDown() override;
