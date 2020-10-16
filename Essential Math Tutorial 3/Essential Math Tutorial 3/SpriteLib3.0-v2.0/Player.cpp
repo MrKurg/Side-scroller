@@ -80,11 +80,17 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 
 void Player::Update()
 {
+	
 	if (!m_locked)
 	{
 		MovementUpdate();
 	}
 	AnimationUpdate();
+	b2Vec2 playerPosition = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition();
+	if (playerPosition.x >= 1170)
+	{
+		exit(0);
+	}
 }
 
 void Player::MovementUpdate()
@@ -92,6 +98,7 @@ void Player::MovementUpdate()
 	m_moving = false;
 	float speed = 100.f;
 	vec3 vel = vec3(0.f, 0.f, 0.f);
+
 	if (m_hasPhysics)
 	{
 
@@ -188,6 +195,8 @@ void Player::MovementUpdate()
 
 		m_physBody->SetVelocity(vel * maxSpeed);
 	}
+
+
 	//else
 	//{
 	//	//Regular Movement
