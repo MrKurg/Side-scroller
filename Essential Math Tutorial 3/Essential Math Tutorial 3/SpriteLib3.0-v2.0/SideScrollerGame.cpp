@@ -6,7 +6,7 @@ SideScrollerGame::SideScrollerGame(std::string name)
 	: Scene(name)
 {
 	//Sets Gravity
-	m_gravity = b2Vec2(0.f, -3000.f);
+	m_gravity = b2Vec2(0.f, -4000.f);
 	m_physicsWorld->SetGravity(m_gravity);
 }
 
@@ -38,31 +38,33 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 	}
 
-	//Setup background
+	//Setup background 
 	{
 		auto entity = ECS::CreateEntity();
 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 
-		std::string fileName = "spritesheets/background.png";
+		std::string fileName = "background.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1750, 550);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(600.f, 100.f, 0.f));
 	}
-	//Setup finish flag
+
+	//Setup finish flag 
 	{
 		auto entity = ECS::CreateEntity();
 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 
-		std::string fileName = "spritesheets/finishline3.png";
+		std::string fileName = "finishline3.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 50);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1000.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1170.f, 250.f, 0.f));
 	}
-	//Setup 1st BOX
+
+	//Setup 1st BOX 
 	{
 		//Creates entity
 		auto entity = ECS::CreateEntity();
@@ -92,6 +94,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 	}
+
 	//Setup 2nd BOX
 	{
 		//Creates entity
@@ -122,18 +125,19 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 	}
-	//1st platform
+
+	//1st platform 
 	{
-		//Creates entity
+		//Creates entity 
 		auto entity = ECS::CreateEntity();
 
-		//Add components
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 
-		//Sets up components
-		std::string fileName = "spritesheets/platform.png";
+		//Sets up components 
+		std::string fileName = "platform.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 150, 20);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 2.f));
 
@@ -142,6 +146,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 
 		float shrinkX = 10.f;
 		float shrinkY = 10.f;
+
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
@@ -152,18 +157,19 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
 	}
-	//2nd platform
+
+	//2nd platform 
 	{
-		//Creates entity
+		//Creates entity 
 		auto entity = ECS::CreateEntity();
 
-		//Add components
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 
 		//Sets up components
-		std::string fileName = "spritesheets/platform.png";
+		std::string fileName = "platform.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 70, 20);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(190.f, -5.f, 2.f));
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
@@ -175,7 +181,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		//change below coordinates to match SetPosition(x,y)
+		//change below coordinates to match SetPosition(x,y) 
 		tempDef.position.Set(float32(190.f), float32(-5.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -183,18 +189,19 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
 	}
-	//3rd platform
+
+	//3rd platform 
 	{
-		//Creates entity
+		//Creates entity 
 		auto entity = ECS::CreateEntity();
 
-		//Add components
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 
-		//Sets up components
-		std::string fileName = "spritesheets/platform.png";
+		//Sets up components 
+		std::string fileName = "platform.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 30, 20);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(240.f, 85.f, 2.f));
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
@@ -206,7 +213,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		//change below coordinates to match SetPosition(x,y)
+		//change below coordinates to match SetPosition(x,y) 
 		tempDef.position.Set(float32(240.f), float32(85.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -214,18 +221,19 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
 	}
-	//4th platform
+
+	//4th platform 
 	{
-		//Creates entity
+		//Creates entity 
 		auto entity = ECS::CreateEntity();
 
-		//Add components
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 
-		//Sets up components
-		std::string fileName = "spritesheets/platform.png";
+		//Sets up components 
+		std::string fileName = "platform.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 60, 20);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(330.f, 75.f, 2.f));
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
@@ -237,7 +245,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		//change below coordinates to match SetPosition(x,y)
+		//change below coordinates to match SetPosition(x,y) 
 		tempDef.position.Set(float32(330.f), float32(75.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -245,18 +253,19 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
 	}
-	//5th platform
+
+	//5th platform 
 	{
-		//Creates entity
+		//Creates entity 
 		auto entity = ECS::CreateEntity();
 
-		//Add components
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 
-		//Sets up components
-		std::string fileName = "spritesheets/platform.png";
+		//Sets up components 
+		std::string fileName = "platform.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 40, 20);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(480.f, 30.f, 2.f));
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
@@ -268,7 +277,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		//change below coordinates to match SetPosition(x,y)
+		//change below coordinates to match SetPosition(x,y) 
 		tempDef.position.Set(float32(480.f), float32(30.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -276,18 +285,19 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
 	}
-	//6th platform
+
+	//6th platform 
 	{
-		//Creates entity
+		//Creates entity 
 		auto entity = ECS::CreateEntity();
 
-		//Add components
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 
-		//Sets up components
-		std::string fileName = "spritesheets/platform.png";
+		//Sets up components 
+		std::string fileName = "platform.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 250, 20);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(700.f, 30.f, 2.f));
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
@@ -299,7 +309,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		//change below coordinates to match SetPosition(x,y)
+		//change below coordinates to match SetPosition(x,y) 
 		tempDef.position.Set(float32(700.f), float32(30.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -307,18 +317,19 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
 	}
-	//7th platform
+
+	//7th platform 
 	{
-		//Creates entity
+		//Creates entity 
 		auto entity = ECS::CreateEntity();
 
-		//Add components
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 
-		//Sets up components
-		std::string fileName = "spritesheets/platform.png";
+		//Sets up components 
+		std::string fileName = "platform.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 80, 20);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(880.f, 80.f, 2.f));
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
@@ -330,7 +341,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		//change below coordinates to match SetPosition(x,y)
+		//change below coordinates to match SetPosition(x,y) 
 		tempDef.position.Set(float32(880.f), float32(80.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -338,18 +349,19 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
 	}
-	//8th platform
+
+	//8th platform 
 	{
-		//Creates entity
+		//Creates entity 
 		auto entity = ECS::CreateEntity();
 
-		//Add components
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 
-		//Sets up components
-		std::string fileName = "spritesheets/platform.png";
+		//Sets up components 
+		std::string fileName = "platform.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 15, 20);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(960.f, 120.f, 2.f));
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
@@ -361,7 +373,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		//change below coordinates to match SetPosition(x,y)
+		//change below coordinates to match SetPosition(x,y) 
 		tempDef.position.Set(float32(960.f), float32(120.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -369,18 +381,19 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
 	}
-	//9th platform
+
+	//9th platform 
 	{
-		//Creates entity
+		//Creates entity 
 		auto entity = ECS::CreateEntity();
 
-		//Add components
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 
-		//Sets up components
-		std::string fileName = "spritesheets/platform.png";
+		//Sets up components 
+		std::string fileName = "platform.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 20);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1100.f, 120.f, 2.f));
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
@@ -392,7 +405,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		//change below coordinates to match SetPosition(x,y)
+		//change below coordinates to match SetPosition(x,y) 
 		tempDef.position.Set(float32(1100.f), float32(120.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -400,18 +413,19 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
 	}
-	//10th platform (last platform/finish line)
+
+	//10th platform (last platform/finish line) 
 	{
-		//Creates entity
+		//Creates entity 
 		auto entity = ECS::CreateEntity();
 
-		//Add components
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 
-		//Sets up components
-		std::string fileName = "spritesheets/platform.png";
+		//Sets up components 
+		std::string fileName = "platform.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 20);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1170.f, 220.f, 2.f));
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
@@ -423,7 +437,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		//change below coordinates to match SetPosition(x,y)
+		//change below coordinates to match SetPosition(x,y) 
 		tempDef.position.Set(float32(1170.f), float32(220.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -431,6 +445,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
 	}
+
 	//Setup Sprite
 	{
 		auto entity = ECS::CreateEntity();
@@ -443,9 +458,9 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<AnimationController>(entity);
 
 		//Set up components
-		std::string fileName = "spritesheets/Link.png";
-		std::string animations = "linkAnimations.json";
-		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 20, 30, &ECS::GetComponent<Sprite>(entity),
+		std::string fileName = "spritesheets/Knight.png";
+		std::string animations = "KnightAnimations.json";
+		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 70, 50, &ECS::GetComponent<Sprite>(entity),
 														&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity), true, &ECS::GetComponent<PhysicsBody>(entity));
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 
@@ -453,7 +468,7 @@ void SideScrollerGame::InitScene(float windowWidth, float windowHeight)
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
 		//Size of hitbox; bigger number for smaller size
-		float shrinkX = 0.f;
+		float shrinkX = 50.f;
 		float shrinkY = 0.f;
 
 		b2Body* tempBody;
@@ -485,10 +500,9 @@ void SideScrollerGame::Update()
 		b2Vec2 playerPosition = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition();
 		if (playerPosition.y <= -80)
 		{
-			ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->SetTransform(b2Vec2(0.f, 18.f),0.f);
+			ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->SetTransform(b2Vec2(0.f, 18.f), 0);
 		}
 	}
-
 }
 
 void SideScrollerGame::KeyboardHold()
@@ -503,6 +517,15 @@ void SideScrollerGame::KeyboardHold()
 		speed *= 10.f;
 	}
 
+	if (Input::GetKeyDown(Key::A))
+	{
+
+	}
+	if (Input::GetKeyDown(Key::D))
+	{
+
+	}
+
 	if (Input::GetKey(Key::A))
 	{
 		vel.x -= speed;
@@ -514,24 +537,11 @@ void SideScrollerGame::KeyboardHold()
 		accel.x += vel.x * timer;
 	}
 
-	if (Input::GetKeyDown(Key::A))
-	{
-		timer += Timer::currentClock;
-		cout << "Time: " << timer <<
-			"\nAcceleration: " << accel.x << endl;
-	}
-	if (Input::GetKeyDown(Key::D))
-	{
-		timer += Timer::currentClock;
-		cout << "Time: " << timer <<
-			"\nAcceleration: " << accel.x << endl;
-	}
-
 	if (Input::GetKeyDown(Key::Space))
 	{
 		if (-0.01f < player.GetBody()->GetLinearVelocity().y && player.GetBody()->GetLinearVelocity().y < 0.01f)
 		{
-			vel.y = 300.f;
+			vel.y = 3000000.f;
 		}
 	}
 	player.GetBody()->SetLinearVelocity(vel);*/

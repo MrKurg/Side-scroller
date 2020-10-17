@@ -41,38 +41,27 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 	m_animController->AddAnimation(animations["IdleLeft"].get<Animation>());
 	//Idle Right
 	m_animController->AddAnimation(animations["IdleRight"].get<Animation>());
-#ifdef TOPDOWN
-	//Idle Up
-	m_animController->AddAnimation(animations["IdleUp"].get<Animation>());
-	//Idle Down
-	m_animController->AddAnimation(animations["IdleDown"].get<Animation>());
-#endif
 
-	//WALK ANIMATIONS
+	//RUN ANIMATIONS
 
-	//Walk Left
-	m_animController->AddAnimation(animations["WalkLeft"].get<Animation>());
-	//Walk Right
-	m_animController->AddAnimation(animations["WalkRight"].get<Animation>());
-#ifdef TOPDOWN
-	//Walk Up
-	m_animController->AddAnimation(animations["WalkUp"].get<Animation>());
-	//Walk Down
-	m_animController->AddAnimation(animations["WalkDown"].get<Animation>());
-#endif
+	//Run Left
+	m_animController->AddAnimation(animations["RunLeft"].get<Animation>());
+	//Run Right
+	m_animController->AddAnimation(animations["RunRight"].get<Animation>());
 
-	//ATTACK ANIMATIONS
+	//JUMP ANIMATIONS
 
-	//Attack Left
-	m_animController->AddAnimation(animations["AttackLeft"].get<Animation>());
-	//Attack Right
-	m_animController->AddAnimation(animations["AttackRight"].get<Animation>());
-#ifdef TOPDOWN
-	//Attack up
-	m_animController->AddAnimation(animations["AttackUp"].get<Animation>());
-	//Attack Down
-	m_animController->AddAnimation(animations["AttackDown"].get<Animation>());
-#endif
+	//Jump Left
+	m_animController->AddAnimation(animations["JumpLeft"].get<Animation>());
+	//Jump Right
+	m_animController->AddAnimation(animations["JumpRight"].get<Animation>());
+
+	//FALL ANIMATIONS
+
+	//Fall Left
+	m_animController->AddAnimation(animations["FallLeft"].get<Animation>());
+	//Fall Right
+	m_animController->AddAnimation(animations["FallRight"].get<Animation>());
 
 	//Set Default Animation
 	m_animController->SetActiveAnim(IDLELEFT);
@@ -80,12 +69,12 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 
 void Player::Update()
 {
-	
 	if (!m_locked)
 	{
 		MovementUpdate();
 	}
 	AnimationUpdate();
+
 	b2Vec2 playerPosition = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition();
 	if (playerPosition.x >= 1170)
 	{
@@ -98,33 +87,17 @@ void Player::MovementUpdate()
 	m_moving = false;
 	float speed = 100.f;
 	vec3 vel = vec3(0.f, 0.f, 0.f);
-
 	if (m_hasPhysics)
 	{
 
 		if (Input::GetKey(Key::Shift))
 		{
-			speed *= 20.f;
+			speed *= 10.f;
 		}
 
 		if (Input::GetKeyDown(Key::Space)) {
 			timer = Timer::currentClock;
 			m_jump = true;
-		}
-		if (Input::GetKey(Key::Space) && m_jump == true)
-		{
-			vel = vec3(0.f, 1.f, 0.f);
-			dtimer = Timer::currentClock - timer;
-			if (dtimer < 300.f) {
-				maxSpeed = speed * 12;
-				//m_physBody->GetVelocity().y + vel.y;
-				m_moving = true;
-				cout << dtimer << endl;
-				cout << m_physBody->GetVelocity().y << endl;
-			}
-			else {
-				m_jump = false;
-			}
 		}
 
 		if (Input::GetKeyDown(Key::A))
@@ -140,14 +113,26 @@ void Player::MovementUpdate()
 			m_facing = LEFT;
 			m_moving = true;
 			decel = true;
-			timer = Timer::currentClock;
 		}
 		if (Input::GetKeyUp(Key::D))
 		{
-			m_facing = LEFT;
+			m_facing = RIGHT;
 			m_moving = true;
 			decel = true;
-			timer = Timer::currentClock;
+		}
+
+		if (Input::GetKey(Key::Space) && m_jump == true)
+		{
+			m_jump = true;
+			vel = vec3(0.f, 1.f, 0.f);
+			dtimer = Timer::currentClock - timer;
+			if (dtimer < 300.f) {
+				maxSpeed = speed * 10;
+				m_moving = true;
+			}
+			else {
+				m_jump = false;
+			}
 		}
 
 		if (Input::GetKey(Key::A))
@@ -177,6 +162,7 @@ void Player::MovementUpdate()
 			dtimer = Timer::currentClock - timer;
 			if (dtimer <= 550.f) {
 				maxSpeed = speed * (dtimer / 550);
+
 				cout << "Time: " << dtimer << "\nAcceleration: " << maxSpeed << endl;
 			}
 			/*if (decel) {
@@ -192,11 +178,9 @@ void Player::MovementUpdate()
 			m_facing = RIGHT;
 			m_moving = true;
 		}
-
+		
 		m_physBody->SetVelocity(vel * maxSpeed);
 	}
-
-
 	//else
 	//{
 	//	//Regular Movement
@@ -224,18 +208,18 @@ void Player::AnimationUpdate()
 	if (m_moving)
 	{
 		//Puts it into the WALK category
-		activeAnimation = WALK;
+		activeAnimation = RUN;
 	}
-	else if (m_attacking)
+	else if (m_jump)
 	{
-		activeAnimation = ATTACK;
+		activeAnimation = JUMP;
 
 		//Check if the attack animation is done
 		if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
 		{
 			//Will auto set to idle
 			m_locked = false;
-			m_attacking = false;
+			m_jump = false;
 			//Resets the attack animation
 			m_animController->GetAnimation(m_animController->GetActiveAnim()).Reset();
 
